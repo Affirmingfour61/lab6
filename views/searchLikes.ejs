@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include("partials/head.ejs") %>
+</head>
+<body class="container">
+<h2>Search Quotes by Likes Range</h2>
+<form method="POST" action="/searchByLikes">
+  Min Likes: <input type="number" name="minLikes" required value="0">
+  Max Likes: <input type="number" name="maxLikes" required value="100">
+  <button class="btn btn-primary">Search</button>
+</form>
+<% if (results) { %>
+  <table class="table">
+    <thead>
+      <tr><th>Quote</th><th>Author</th><th>Category</th><th>Likes</th></tr>
+    </thead>
+    <tbody>
+      <% results.forEach(row => { %>
+        <tr>
+          <td><%= row.quote %></td>
+          <td>
+            <a href="#" onclick="showAuthorInfo('<%= row.authorId %>'); return false;">
+              <%= row.firstName %> <%= row.lastName %>
+            </a>
+          </td>
+          <td><%= row.category %></td>
+          <td><%= row.likes %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+<% } %>
+<script>
+function showAuthorInfo(authorId) {
+  fetch(`/author/${authorId}`)
+    .then(res => res.json())
+    .then(author => {
+      document.getElementById('authorModalTitle').innerText = author.firstName + ' ' + author.lastName;
+      document.getElementById('authorModalBody').innerHTML =
+        `<img src="${author.pic}" class="img-fluid"/><br>
+        <strong>Born:</strong> ${author.dob || ''} <br>
+        <strong>Died:</strong> ${author.dod || ''} <br>
+        <strong>Biography:</strong> <p>${author.bio}</p>
+        <strong>Gender:</strong> ${author.gender || ''}`;
+      document.getElementById('authorModal').style.display = 'block';
+    });
+}
+function closeModal() {
+  document.getElementById('authorModal').style.display = 'none';
+}
+</script>
+<div class="modal" tabindex="-1" id="authorModal" style="display:none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header"><h5 class="modal-title" id="authorModalTitle"></h5>
+      <button type="button" class="btn-close" onclick="closeModal()"></button></div>
+      <div class="modal-body" id="authorModalBody"></div>
+    </div>
+  </div>
+</div>
+</body>
+<footer>
+    <%- include("partials/foot.ejs") %>
+</footer>
+</html>

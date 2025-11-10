@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Quote</title>
+</head>
+<body>
+
+    <h1> New Quote </h1>
+
+    <form action="/newQuote" method="POST">
+
+        Quote:
+        <textarea name="quote"></textarea> <br>
+
+        Author:
+        <select name="authorId">
+            <option value="1"> Albert Einstein</option>
+        </select>
+
+        <br>
+        Category:
+        <select name="category">
+            <option> Motivational </option>
+        </select>
+
+        <button>Add Quote</button>
+
+    </form>
+    
+</body>
+</html>
